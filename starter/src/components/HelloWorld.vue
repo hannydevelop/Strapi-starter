@@ -1,0 +1,263 @@
+<template>
+  <div class="hello">
+    <div id="layout" class="pure-g">
+      <div class="sidebar pure-u-1 pure-u-md-1-4">
+        <div class="header">
+          <h1 class="brand-title">A Sample Blog</h1>
+          <h2 class="brand-tagline">Creating a blog For Strapi Starter</h2>
+
+          <nav class="nav">
+            <ul class="nav-list">
+              <li class="nav-item">
+                A sample Strapi-Vue blog.
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+          <!-- A wrapper for all the blog posts -->
+            <h1 class="content-subhead">Blog Posts</h1>
+          <div v-for="blog in blogs" :key="blog.id" class="posts">
+
+            <!-- A single blog post -->
+            <section class="post">
+              <header class="post-header">
+                <h2 class="post-title">{{ blog.Blog_title }}</h2>
+
+                <p class="post-meta">
+                  {{ blog.Blog_description }}
+                  <button
+                    @click="Delete(blog.id)"
+                    class="post-category post-category-js"
+                  >
+                    Delete</button
+                  ><button
+                    @click="Update(blog.id)"
+                    class="post-category post-category-design"
+                    href="#"
+                  >
+                    Update
+                  </button>
+                </p>
+              </header>
+
+              <div class="post-description">
+                <p>
+                  {{ blog.Blog_content }}
+                </p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+export default {
+  name: "HelloWorld",
+  data() {
+    return {
+      blogs: [],
+    };
+  },
+
+  methods: {
+    async Delete(id) {
+      await axios
+        .delete(`http://localhost:1337/blogs/${id}`, {}).then(
+          (response) => {
+            this.blogs = response.data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    },
+    Update(id) {
+      axios
+        .put(`http://localhost:1337/blogs/${id}`, {
+          Blog_title: this.Blog_title,
+          Blog_description: this.Blog_description,
+          Blog_content: this.Blog_content,
+        })
+        .then(
+          (response) => {
+            this.blogs = response.data;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    },
+  },
+
+  mounted() {
+    axios.get("http://localhost:1337/blogs", {}).then(
+      (response) => {
+        this.blogs = response.data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(61, 146, 201);
+}
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+h3 {
+  font-weight: 100;
+}
+
+/* LAYOUT CSS */
+.pure-img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+#layout {
+  padding: 0;
+}
+
+.header {
+  text-align: center;
+  top: auto;
+  margin: 3em auto;
+}
+
+.sidebar {
+  background: rgb(61, 79, 93);
+  color: #fff;
+}
+
+.brand-title,
+.brand-tagline {
+  margin: 0;
+}
+.brand-title {
+  text-transform: uppercase;
+}
+.brand-tagline {
+  font-weight: 300;
+  color: rgb(176, 202, 219);
+}
+
+.nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-item {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+}
+.nav-item a {
+  background: transparent;
+  border: 2px solid rgb(176, 202, 219);
+  color: #fff;
+  margin-top: 1em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 85%;
+}
+.nav-item a:hover,
+.nav-item a:focus {
+  border: 2px solid rgb(61, 146, 201);
+  text-decoration: none;
+}
+
+.content-subhead {
+  text-transform: uppercase;
+  color: #aaa;
+  border-bottom: 1px solid #eee;
+  padding: 0.4em 0;
+  font-size: 80%;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.content {
+  padding: 2em 1em 0;
+}
+
+.post {
+  padding-bottom: 2em;
+}
+.post-title {
+  font-size: 2em;
+  color: #222;
+  margin-bottom: 0.2em;
+}
+.post-description {
+  font-family: Georgia, "Cambria", serif;
+  color: #444;
+  line-height: 1.8em;
+}
+.post-meta {
+  color: #999;
+  font-size: 90%;
+  margin: 0;
+}
+
+.post-category {
+  margin: 0 0.1em;
+  padding: 0.3em 1em;
+  color: #fff;
+  background: #999;
+  font-size: 80%;
+}
+.post-category-design {
+  background: #5aba59;
+}
+.post-category-pure {
+  background: #4d85d1;
+}
+.post-category-yui {
+  background: #8156a7;
+}
+.post-category-js {
+  background: #df2d4f;
+}
+
+
+@media (min-width: 48em) {
+  .content {
+    padding: 2em 3em 0;
+    margin-left: 25%;
+  }
+
+  .header {
+    margin: 80% 2em 0;
+    text-align: right;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+}
+</style>
